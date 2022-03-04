@@ -1,12 +1,23 @@
 const crypto = require("crypto");
+const fs = require("fs");
 
 const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
   modulusLength: 1024,
+  publicKeyEncoding: {
+    type: "pkcs1",
+    format: "pem",
+  },
+  privateKeyEncoding: {
+    type: "pkcs1",
+    format: "pem",
+  },
 });
 
 const data = {
   temp: 88,
 };
+
+// console.log(publicKey);
 
 const encrypted = crypto.publicEncrypt(
   {
@@ -26,5 +37,8 @@ const decrypted = crypto.privateDecrypt(
   encrypted
 );
 
-console.log(encrypted.toString("base64"));
-console.log(decrypted.toString("utf8"));
+// console.log(encrypted.toString("base64"));
+// console.log(decrypted.toString("utf8"));
+
+fs.writeFileSync("./public.pem", publicKey);
+fs.writeFileSync("./private.pem", privateKey);
